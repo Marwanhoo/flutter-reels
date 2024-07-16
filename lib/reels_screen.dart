@@ -25,7 +25,8 @@ class ReelsScreen extends StatelessWidget {
               itemCount: state.reels.length,
               itemBuilder: (context, index) {
                 //return VideoPlayerWidget(reelsModel: state.reels[index],);
-                return VideoPlayerWidget2(reelsModel: state.reels[index],);
+                //return VideoPlayerWidget2(reelsModel: state.reels[index],);
+                return VideoPlayerWidget3(reelsModel: state.reels[index],);
               },
             );
 
