@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_reels/cubit/reels_state.dart';
-import 'package:flutter_reels/reel_model.dart';
+import 'package:flutter_reels/controller/cubit/reels_state.dart';
+import 'package:flutter_reels/model/reel_model.dart';
 import 'package:http/http.dart' as http;
 
 class ReelsCubit extends Cubit<ReelsStates> {

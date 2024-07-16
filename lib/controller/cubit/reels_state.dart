@@ -1,4 +1,4 @@
-import 'package:flutter_reels/reel_model.dart';
+import 'package:flutter_reels/model/reel_model.dart';
 
 abstract class ReelsStates {}
 
