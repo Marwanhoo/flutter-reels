@@ -19,16 +19,17 @@ class _ReelWidgetState extends State<ReelWidget> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.reelsModel.videoUrl))
-      ..initialize().then((_) {
-        setState(() {});
-        _controller.play();
-        _controller.addListener(() {
-          setState(() {
-            _currentPosition = _controller.value.position;
+    _controller =
+        VideoPlayerController.networkUrl(Uri.parse(widget.reelsModel.videoUrl))
+          ..initialize().then((_) {
+            setState(() {});
+            _controller.play();
+            _controller.addListener(() {
+              setState(() {
+                _currentPosition = _controller.value.position;
+              });
+            });
           });
-        });
-      });
   }
 
   @override
@@ -81,7 +82,49 @@ class _ReelWidgetState extends State<ReelWidget> {
             onTap: _toggleControls,
             child: Stack(
               children: [
-                VideoPlayer(_controller),
+                Column(
+                  children: [
+                    Expanded(
+                      child: VideoPlayer(_controller),
+                    ),
+                    SizedBox(
+                      height: 50,
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            child: IconButton(
+                              icon: Icon(
+                                  _isPlaying ? Icons.pause : Icons.play_arrow),
+                              onPressed: () {
+                                setState(() {
+                                  if (_isPlaying) {
+                                    _controller.pause();
+                                  } else {
+                                    _controller.play();
+                                  }
+                                  _isPlaying = !_isPlaying;
+                                });
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: VideoProgressIndicator(
+                              _controller,
+                              allowScrubbing: true,
+                              padding: EdgeInsets.zero,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            '${_currentPosition.inMinutes}:${(_currentPosition.inSeconds % 60).toString().padLeft(2, '0')}',
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
                 if (_showControls)
                   Positioned.fill(
                     child: Container(
@@ -109,39 +152,42 @@ class _ReelWidgetState extends State<ReelWidget> {
                       ),
                     ),
                   ),
-                Positioned(
-                  bottom: 10,
-                  left: 10,
-                  right: 10,
-                  child: Row(
+
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      IconButton(
-                        icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
-                        onPressed: () {
-                          setState(() {
-                            if (_isPlaying) {
-                              _controller.pause();
-                            } else {
-                              _controller.play();
-                            }
-                            _isPlaying = !_isPlaying;
-                          });
-                        },
+                      const CircleAvatar(
+                        child: Icon(Icons.favorite),
                       ),
-                      Expanded(
-                          child: VideoProgressIndicator(
-                        _controller,
-                        allowScrubbing: true,
-                      )),
+                      Container(
+                        color: Colors.black,
+                        child: Text("${widget.reelsModel.likesCount}",style: const TextStyle(color: Colors.white),),
+                      ),
+                      Container(
+                        color: Colors.black,
+                        child: const Text("Likes",style: TextStyle(color: Colors.white),),
+                      ),
+                      const SizedBox(height: 15),
+
+                      const CircleAvatar(
+                        child: Icon(Icons.comment),
+                      ),
+                      Container(
+                        color: Colors.black,
+                        child: const Text("Comment",style: TextStyle(color: Colors.white),),
+                      ),
+                      const SizedBox(height: 15),
+
+                      const CircleAvatar(
+                        child: Icon(Icons.share),
+                      ),
+                      Container(
+                        color: Colors.black,
+                        child: const Text("Share",style: TextStyle(color: Colors.white),),
+                      ),
                     ],
-                  ),
-                ),
-                Positioned(
-                  bottom: 10,
-                  right: 10,
-                  child: Text(
-                    '${_currentPosition.inMinutes}:${(_currentPosition.inSeconds % 60).toString().padLeft(2, '0')}',
-                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ],
